@@ -1,4 +1,12 @@
-platform/Code.java
- platform.Code
+platform/controller/ApiController.java
+ platform.controller.ApiController
+platform/repository/Repository.java
+ platform.repository.Repository
+platform/util/Util.java
+ platform.util.Util
+platform/model/Code.java
+ platform.model.Code
+platform/controller/HtmlController.java
+ platform.controller.HtmlController
 platform/CodeSharingPlatform.java
  platform.CodeSharingPlatform

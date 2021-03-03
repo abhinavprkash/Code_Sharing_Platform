@@ -244,20 +244,6 @@ files:
         }
     }
   learner_created: false
-- name: src/resources/templates/codePage.html
-  visible: true
-  text: |-
-    <!DOCTYPE html>
-    <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
-    <head>
-        <meta charset="UTF-8">
-        <title>Code</title>
-    </head>
-    <body>
-    <pre><span th:text="${codeBody}">Default</span></pre>
-    </body>
-    </html>
-  learner_created: true
 - name: src/platform/ApiController.java
   visible: true
   learner_created: true
@@ -284,4 +270,4 @@ status: Solved
 feedback:
   message: Congratulations!
   time: Mon, 01 Mar 2021 02:27:46 UTC
-record: -1
+record: 2
