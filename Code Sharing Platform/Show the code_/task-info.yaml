@@ -1,5 +1,5 @@
 type: edu
-custom_name: Show the code!
+custom_name: Show the platform.code!
 files:
 - name: src/platform/CodeSharingPlatform.java
   visible: true

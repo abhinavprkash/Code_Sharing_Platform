@@ -259,7 +259,7 @@ files:
 - name: src/platform/WebController.java
   visible: true
   learner_created: true
-- name: src/resources/code.html
+- name: src/resources/platform.code.html
   visible: true
   learner_created: true
 - name: src/resources/create.html

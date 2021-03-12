@@ -467,6 +467,120 @@ files:
         }
     }
   learner_created: false
+- name: src/resources/templates/css/code.css
+  visible: true
+  learner_created: true
+- name: src/resources/templates/css/input_code.css
+  visible: true
+  learner_created: true
+- name: src/platform/controllers/CodeController.java
+  visible: true
+  learner_created: true
+- name: src/platform/repositories/CodeRepository.java
+  visible: true
+  learner_created: true
+- name: src/platform/entities/Code.java
+  visible: true
+  learner_created: true
+- name: src/platform/exception/CodeNotFoundException.java
+  visible: true
+  learner_created: true
+- name: src/platform/model/Code.java
+  visible: true
+  learner_created: true
+- name: src/platform/repository/CodeRepository.java
+  visible: true
+  learner_created: true
+- name: src/resources/templates/code.html
+  visible: true
+  learner_created: true
+- name: src/resources/templates/lastcodes.html
+  visible: true
+  learner_created: true
+- name: src/resources/templates/newcode.html
+  visible: true
+  learner_created: true
+- name: src/platform/dto/CodeDto.java
+  visible: true
+  learner_created: true
+- name: src/platform/dto/CodeDtoApi.java
+  visible: true
+  learner_created: true
+- name: src/platform/dto/CodeDtoView.java
+  visible: true
+  learner_created: true
+- name: src/platform/filter/APIResponseHeaderFilter.java
+  visible: true
+  learner_created: true
+- name: src/platform/projection/CodeProjectorApi.java
+  visible: true
+  learner_created: true
+- name: src/platform/controller/ApiController.java
+  visible: true
+  learner_created: true
+- name: src/platform/controller/HtmlController.java
+  visible: true
+  learner_created: true
+- name: src/platform/service/CodeService.java
+  visible: true
+  learner_created: true
+- name: src/platform/util/Util.java
+  visible: true
+  learner_created: true
 feedback_link: https://hyperskill.org/projects/130/stages/695/implement#comment
-status: Unchecked
-record: -1
+status: Failed
+feedback:
+  message: |-
+    Wrong answer in test #2
+
+    The JSON object at key id is incorrect, found &quot;d754a272-2504-4241-9c6e-9039853cc962&quot;
+
+    Full JSON:
+    {
+      &quot;id&quot;: &quot;d754a272-2504-4241-9c6e-9039853cc962&quot;
+    }
+
+    Please find below the output of your program during this failed test.
+
+    ---
+
+
+      .   ____          _            __ _ _
+     /\\ / ___&#39;_ __ _ _(_)_ __  __ _ \ \ \ \
+    ( ( )\___ | &#39;_ | &#39;_| | &#39;_ \/ _` | \ \ \ \
+     \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+      &#39;  |____| .__|_| |_|_| |_\__, | / / / /
+     =========|_|==============|___/=/_/_/_/
+     :: Spring Boot ::        (v2.3.3.RELEASE)
+
+    2021-03-12 09:12:12.774  INFO 12508 --- [    Test worker] platform.CodeSharingPlatform             : Starting CodeSharingPlatform on MSI with PID 12508 (started by Abhinav in C:\Users\Abhinav\IdeaProjects\Code Sharing Platform\Code Sharing Platform\task)
+    2021-03-12 09:12:12.782  INFO 12508 --- [    Test worker] platform.CodeSharingPlatform             : No active profile set, falling back to default profiles: default
+    2021-03-12 09:12:14.421  INFO 12508 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFERRED mode.
+    2021-03-12 09:12:14.573  INFO 12508 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 128ms. Found 1 JPA repository interfaces.
+    2021-03-12 09:12:16.180  INFO 12508 --- [    Test worker] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8889 (http)
+    2021-03-12 09:12:16.208  INFO 12508 --- [    Test worker] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+    2021-03-12 09:12:16.209  INFO 12508 --- [    Test worker] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.37]
+    2021-03-12 09:12:16.477  INFO 12508 --- [    Test worker] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+    2021-03-12 09:12:16.478  INFO 12508 --- [    Test worker] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3578 ms
+    2021-03-12 09:12:16.824  INFO 12508 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+    2021-03-12 09:12:17.251  INFO 12508 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+    2021-03-12 09:12:17.267  INFO 12508 --- [    Test worker] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at &#39;/h2-console&#39;. Database available at &#39;jdbc:h2:file:../snippets&#39;
+    2021-03-12 09:12:17.777  INFO 12508 --- [    Test worker] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService &#39;applicationTaskExecutor&#39;
+    2021-03-12 09:12:17.880  INFO 12508 --- [         task-1] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+    2021-03-12 09:12:17.950  WARN 12508 --- [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+    2021-03-12 09:12:18.042  INFO 12508 --- [         task-1] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.20.Final
+    2021-03-12 09:12:18.649  INFO 12508 --- [         task-1] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.0.Final}
+    2021-03-12 09:12:19.008  INFO 12508 --- [         task-1] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.H2Dialect
+    2021-03-12 09:12:20.782  INFO 12508 --- [         task-1] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+    2021-03-12 09:12:20.797  INFO 12508 --- [         task-1] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit &#39;default&#39;
+    2021-03-12 09:12:20.966  INFO 12508 --- [    Test worker] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 14 endpoint(s) beneath base path &#39;/actuator&#39;
+    2021-03-12 09:12:21.055  INFO 12508 --- [    Test worker] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8889 (http) with context path &#39;&#39;
+    2021-03-12 09:12:21.057  INFO 12508 --- [    Test worker] DeferredRepositoryInitializationListener : Triggering deferred initialization of Spring Data repositories…
+    2021-03-12 09:12:21.487  INFO 12508 --- [    Test worker] DeferredRepositoryInitializationListener : Spring Data repositories initialized!
+    2021-03-12 09:12:21.514  INFO 12508 --- [    Test worker] platform.CodeSharingPlatform             : Started CodeSharingPlatform in 9.316 seconds (JVM running for 10.725)
+    2021-03-12 09:12:22.422  INFO 12508 --- [nio-8889-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet &#39;dispatcherServlet&#39;
+    2021-03-12 09:12:22.422  INFO 12508 --- [nio-8889-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet &#39;dispatcherServlet&#39;
+    2021-03-12 09:12:22.435  INFO 12508 --- [nio-8889-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 12 ms
+    1615520543126
+  time: Fri, 12 Mar 2021 03:42:24 UTC
+record: 4

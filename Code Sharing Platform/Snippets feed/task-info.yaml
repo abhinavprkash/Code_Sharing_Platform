@@ -397,15 +397,6 @@ files:
 - name: src/platform/CodeSharingPlatform.java
   visible: true
   learner_created: true
-- name: src/platform/exception/CodeContainerIsHiddenException.java
-  visible: true
-  learner_created: true
-- name: src/platform/exception/CodeContainerMissingException.java
-  visible: true
-  learner_created: true
-- name: src/platform/service/CodeContainerService.java
-  visible: true
-  learner_created: true
 - name: src/platform/controller/ApiController.java
   visible: true
   learner_created: true
@@ -421,7 +412,7 @@ files:
 - name: src/platform/util/Util.java
   visible: true
   learner_created: true
-- name: src/resources/templates/code.html
+- name: src/resources/templates/platform.code.html
   visible: true
   learner_created: true
 - name: src/resources/templates/lastcodes.html
@@ -435,4 +426,4 @@ status: Solved
 feedback:
   message: Congratulations!
   time: Wed, 03 Mar 2021 13:32:04 UTC
-record: -1
+record: 3

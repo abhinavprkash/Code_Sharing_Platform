@@ -631,6 +631,529 @@ files:
         }
     }
   learner_created: false
+- name: src/platform/model/Code.java
+  visible: true
+  text: |2-
+
+    package platform.model;
+
+
+    import com.fasterxml.jackson.annotation.JsonProperty;
+    import platform.util.Util;
+
+    import javax.persistence.*;
+    import java.time.LocalDateTime;
+
+    @Entity
+    @Table(name = "codestorage")
+    public class Code {
+
+        @Id
+        @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+        private String id = Util.getNewUUID();
+
+        String code;
+        String date = Util.getCurrentDateTime();
+        long time;
+        int views;
+
+        @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+        String title;
+
+        @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+        boolean timeLimit;
+
+        @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+        long startSeconds;
+
+        @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+        LocalDateTime startTime;
+
+        @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+        boolean viewLimit;
+
+        public Code() {
+        }
+
+        public Code(String title, String code, String date, int time, int views, boolean timeLimit, boolean viewLimit) {
+            this.title = title;
+            this.code = code;
+            this.date = date;
+            this.time = time;
+            this.views = views;
+            this.timeLimit = timeLimit;
+            this.viewLimit = viewLimit;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public void setCode(String code) {
+            this.code = code;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
+
+        public String getDate() {
+            return date;
+        }
+
+        public void setDate(String date) {
+            this.date = date;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public long getTime() {
+            return time;
+        }
+
+        public void setTime(long time) {
+            this.time = time;
+        }
+
+        public int getViews() {
+            return views;
+        }
+
+        public void setViews(int views) {
+            this.views = views;
+        }
+
+        public boolean isTimeLimit() {
+            return timeLimit;
+        }
+
+        public void setTimeLimit(boolean timelimit) {
+            this.timeLimit = timelimit;
+        }
+
+        public boolean isViewLimit() {
+            return viewLimit;
+        }
+
+        public void setViewLimit(boolean viewlimit) {
+            this.viewLimit = viewlimit;
+        }
+
+        public long getStartSeconds() {
+            return startSeconds;
+        }
+
+        public void setStartSeconds(long startSeconds) {
+            this.startSeconds = startSeconds;
+        }
+
+        public LocalDateTime getStartTime() {
+            return startTime;
+        }
+
+        public void setStartTime(LocalDateTime startTime) {
+            this.startTime = startTime;
+        }
+    }
+  learner_created: true
+- name: src/resources/templates/newcode.html
+  visible: true
+  text: |-
+    <!DOCTYPE html>
+
+    <html xmlns:th="http://www.thymeleaf.org">
+
+
+    <head>
+
+        <meta charset="utf-8"/>
+        <title>Create</title>
+
+    </head>
+
+    <body>
+
+    <textarea id="code_snippet">...</textarea>
+    <button id="send_snippet" type="submit" onclick="send()">Submit</button>
+
+    <script type="text/javascript">
+        function send() {
+            let object = {
+                "code": document.getElementById("code_snippet").value
+            };
+
+            let json = JSON.stringify(object);
+
+            let xhr = new XMLHttpRequest();
+            xhr.open("POST", '/api/code/new', false)
+            xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+            xhr.send(json);
+
+            if (xhr.status === 200) {
+                alert("Success!");
+            }
+        }
+    </script>
+
+    </body>
+    </html>
+  learner_created: true
+- name: src/platform/exception/CodeNotFoundException.java
+  visible: true
+  text: |-
+    package platform.exception;
+
+
+    import org.springframework.http.HttpStatus;
+    import org.springframework.web.bind.annotation.ResponseStatus;
+
+    @ResponseStatus(code = HttpStatus.NOT_FOUND, reason = "Code not found")
+    public class CodeNotFoundException extends RuntimeException {
+    }
+  learner_created: true
+- name: src/platform/controller/HtmlController.java
+  visible: true
+  text: |+
+    package platform.controller;
+
+    import org.springframework.beans.factory.annotation.Autowired;
+    import org.springframework.stereotype.Controller;
+    import org.springframework.ui.Model;
+    import org.springframework.web.bind.annotation.*;
+    import platform.model.Code;
+    import platform.service.CodeService;
+
+    import java.time.LocalDateTime;
+    import java.util.List;
+
+    @Controller
+    public class HtmlController {
+
+        private CodeService service;
+
+        public HtmlController() {
+        }
+
+        @Autowired
+        public HtmlController(CodeService service) {
+            this.service = service;
+        }
+
+        @GetMapping(path = "/code/{id}", produces = "text/html")
+        public String getHtmlCode(@PathVariable("id") String id, Model model) {
+
+            Code responseCode = service.getCodeFromStorage(id);
+            if (responseCode.isViewLimit()) {
+                service.updateViewById(id);
+                responseCode = service.getCodeFromStorage(id);
+            }
+            if (responseCode.isTimeLimit()) {
+    //            Another option is the calculation of the lifetime of snippet
+    //            LocalDateTime currentTime = LocalDateTime.now();
+    //            service.updateLocalTimeById(id, currentTime);
+                long currentSecond = System.currentTimeMillis();
+                service.updateTimeById(id, currentSecond);
+                responseCode = service.getCodeFromStorage(id);
+            }
+            model.addAttribute("responseCode", responseCode);
+
+            return "code";
+        }
+
+        @GetMapping(path = "/code/latest", produces = "text/html")
+        public String getHtmlLatestCode(Model model) {
+            List<Code> lastCodesStore = service.getLastCode();
+            model.addAttribute("lastCodesStore", lastCodesStore);
+            return "lastcodes";
+        }
+
+
+        @GetMapping(path = "/code/new", produces = "text/html")
+        public String getHtmlCodeNew() {
+            return "newcode";
+        }
+
+    }
+
+  learner_created: true
+- name: src/platform/service/CodeService.java
+  visible: true
+  text: |-
+    package platform.service;
+
+    import org.springframework.beans.factory.annotation.Autowired;
+    import org.springframework.stereotype.Service;
+    import platform.exception.CodeNotFoundException;
+    import platform.model.Code;
+    import platform.repository.CodeRepository;
+
+    import java.time.LocalDateTime;
+    import java.time.LocalTime;
+    import java.time.temporal.ChronoUnit;
+    import java.util.ArrayList;
+    import java.util.List;
+    import java.util.Optional;
+
+    @Service
+    public class CodeService {
+        private final CodeRepository codeRepository;
+
+        @Autowired
+        public CodeService(CodeRepository codeRepository) {
+            this.codeRepository = codeRepository;
+        }
+
+        public void addCodeToStorage(Code code) {
+            codeRepository.save(code);
+        }
+
+        public Code getCodeFromStorage(String id) {
+            Optional<Code> requiredCode = codeRepository.findById(id);
+            if (requiredCode.isEmpty()) {
+                throw new CodeNotFoundException();
+            } else {
+                return requiredCode.get();
+            }
+        }
+
+        public void updateViewById(String id) {
+            Code updateCode = getCodeFromStorage(id);
+            int views = updateCode.getViews();
+            if (views > 0) {
+                views--;
+                updateCode.setViews(views);
+                codeRepository.save(updateCode);
+            } else {
+                codeRepository.delete(updateCode);
+            }
+        }
+
+        public void updateTimeById(String id, long currentSecond) {
+            Code updateCode = getCodeFromStorage(id);
+            long time = updateCode.getTime() - ((currentSecond - updateCode.getStartSeconds())/ 1000);
+            if (time > 0) {
+                updateCode.setTime(time);
+                codeRepository.save(updateCode);
+            } else {
+                codeRepository.delete(updateCode);
+            }
+        }
+
+        //Another option is the calculation of the lifetime of snippet
+        public void updateLocalTimeById(String id, LocalDateTime currentTime) {
+            Code updateCode = getCodeFromStorage(id);
+            long secBetween = ChronoUnit.SECONDS.between(updateCode.getStartTime(), currentTime);
+            int time = (int) (updateCode.getTime() - secBetween);
+            if (time > 0) {
+                updateCode.setTime(time);
+                codeRepository.save(updateCode);
+            } else {
+                codeRepository.delete(updateCode);
+            }
+        }
+
+        public List<Code> getLastCode() {
+            List<Code> codesWithoutLimit = new ArrayList<>();
+            codeRepository.findAll().forEach(code -> {
+                if (!code.isViewLimit() && !code.isTimeLimit()) {
+                    codesWithoutLimit.add(code);
+                }
+            });
+            List<Code> lastCodes = new ArrayList<>();
+            int NUMBER_ON_PAGE = 10;
+            int lastIdRepository = codesWithoutLimit.size() - 1;
+            int outputLimitId = codesWithoutLimit.size() % NUMBER_ON_PAGE == codesWithoutLimit.size() ? 0
+                    : codesWithoutLimit.size() % NUMBER_ON_PAGE;
+            for (int i = lastIdRepository; i >= outputLimitId; i--) {
+                Code eachCode = codesWithoutLimit.get(i);
+                lastCodes.add(eachCode);
+            }
+            return lastCodes;
+        }
+
+    }
+  learner_created: true
+- name: src/platform/util/Util.java
+  visible: true
+  text: |-
+    package platform.util;
+
+    import java.time.LocalDateTime;
+    import java.time.format.DateTimeFormatter;
+    import java.util.UUID;
+
+    public class Util {
+
+        public static String getCurrentDateTime() {
+            LocalDateTime today = LocalDateTime.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+            return today.format(formatter);
+        }
+
+        public static String getNewUUID(){
+            UUID uuid = UUID.randomUUID();
+            return uuid.toString();
+        }
+    }
+  learner_created: true
+- name: src/platform/controller/ApiController.java
+  visible: true
+  text: |-
+    package platform.controller;
+
+    import org.springframework.beans.factory.annotation.Autowired;
+    import org.springframework.web.bind.annotation.*;
+    import platform.model.Code;
+    import platform.service.CodeService;
+    import java.time.LocalDateTime;
+
+
+    @RestController
+    public class ApiController {
+
+        private CodeService service;
+
+        public ApiController() {
+        }
+
+        @Autowired
+        public ApiController(CodeService service) {
+            this.service = service;
+        }
+
+        @GetMapping(path = "/api/code/{id}", produces = "application/json;charset=UTF-8")
+        public Code getApiCode(@PathVariable("id") String id) {
+            Code responseCode = service.getCodeFromStorage(id);
+
+            if (responseCode.isViewLimit()) {
+                service.updateViewById(id);
+            }
+            if (responseCode.isTimeLimit()) {
+    //            Another option is the calculation of the lifetime of snippet
+    //            LocalDateTime currentTime = LocalDateTime.now();
+    //            service.updateLocalTimeById(id, currentTime);
+                long currentSecond = System.currentTimeMillis();
+                service.updateTimeById(id, currentSecond);
+
+            }
+            return service.getCodeFromStorage(id);
+        }
+
+        @GetMapping(path = "/api/code/latest", produces = "application/json;charset=UTF-8")
+        public Object[] getApiLatestCode() {
+            return service.getLastCode().toArray();
+        }
+
+
+        @PostMapping(path = "/api/code/new", produces = "application/json;charset=UTF-8")
+        public String setApiCode(@RequestBody Code newCode) {
+            Code responseCode = new Code();
+            responseCode.setCode(newCode.getCode());
+            responseCode.setTitle("Code");
+            responseCode.setTime(newCode.getTime());
+            responseCode.setStartSeconds(System.currentTimeMillis());
+            responseCode.setStartTime(LocalDateTime.now());
+            System.out.println(responseCode.getStartSeconds());
+            responseCode.setViews(newCode.getViews());
+            responseCode.setViewLimit(newCode.getViews() > 0);
+            responseCode.setTimeLimit(newCode.getTime() > 0);
+            service.addCodeToStorage(responseCode);
+            String response = "{ \"id\" : \"" + responseCode.getId() + "\" }";
+            return response;
+        }
+
+    }
+  learner_created: true
+- name: src/resources/templates/lastcodes.html
+  visible: true
+  text: |-
+    <!DOCTYPE html>
+
+    <html xmlns:th="http://www.thymeleaf.org">
+
+    <head>
+        <link rel="stylesheet"
+              href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/styles/default.min.css">
+        <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+
+        <meta charset="utf-8"/>
+        <title>Latest</title>
+
+    </head>
+
+    <body>
+
+    <div th:each="eachLastCode : ${lastCodesStore}">
+        <span id="load_date" th:text="${eachLastCode.date}"></span>
+        <pre id="code_snippet"><code th:text="${eachLastCode.code}"></code></pre>
+    </div>
+
+    </body>
+    </html>
+  learner_created: true
+- name: src/resources/templates/code.html
+  visible: true
+  text: |-
+    <!DOCTYPE html>
+
+    <html xmlns:th="http://www.thymeleaf.org">
+
+
+    <head th:fragment="headerfragment">
+
+        <meta charset="utf-8"/>
+        <link rel="stylesheet"
+              href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/styles/default.min.css">
+        <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.1/build/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+        <title th:text="${responseCode.title}">Template Title</title>
+
+    </head>
+
+    <body>
+
+    <span id="load_date" th:text="${responseCode.date}"></span>
+    <p>
+        <span th:if="${responseCode.viewLimit}? ${responseCode.views >= 0}">
+                <span id="views_restriction" th:text="${responseCode.views}"></span> more views allowed
+        </span>
+    </p>
+    <p>
+        <span th:if="${responseCode.timeLimit}? ${responseCode.time >= 0}">
+        The code will be available for <span id="time_restriction" th:text="${responseCode.time}"></span> seconds
+        </span>
+    </p>
+    <pre id="code_snippet"><code th:text="${responseCode.code}"></code></pre>
+
+
+    </body>
+    </html>
+  learner_created: true
+- name: src/platform/repository/CodeRepository.java
+  visible: true
+  text: |-
+    package platform.repository;
+
+    import org.springframework.data.repository.CrudRepository;
+    import platform.model.Code;
+
+    public interface CodeRepository extends CrudRepository<Code, String> {
+    }
+  learner_created: true
 feedback_link: https://hyperskill.org/projects/130/stages/696/implement#comment
-status: Unchecked
+status: Solved
+feedback:
+  message: Congratulations!
+  time: Fri, 12 Mar 2021 03:44:29 UTC
 record: -1
